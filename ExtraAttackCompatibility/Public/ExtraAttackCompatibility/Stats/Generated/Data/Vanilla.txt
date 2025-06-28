@@ -1,0 +1,49 @@
+﻿// ==================================== Passives ====================================
+
+new entry "ExtraAttack"
+type "PassiveData"
+using "ExtraAttack"
+// data "Conditions" "(context.HasContextFlag(StatsFunctorContext.OnCast) and ExtraAttackSpellCheck() and HasUseCosts('ActionPoint', true) and not Tagged('EXTRA_ATTACK_BLOCKED',context.Source) and not HasStatus('SLAYER_PLAYER',context.Source) and not HasStatus('SLAYER_PLAYER_10',context.Source) and TurnBased(context.Source)) or (context.HasContextFlag(StatsFunctorContext.OnStatusRemoved) and StatusId('INITIAL_ATTACK_TECHNICAL') and TurnBased()) or (context.HasContextFlag(StatsFunctorContext.OnStatusApplied) and StatusId('EXTRA_ATTACK_Q'))"
+data "Conditions" "((context.HasContextFlag(StatsFunctorContext.OnCast) and (ExtraAttackSpellCheck() or IsModdedExtraAttack()) and HasUseCosts('ActionPoint', true) and not Tagged('EXTRA_ATTACK_BLOCKED',context.Source) and not HasStatus('SLAYER_PLAYER',context.Source) and not HasStatus('SLAYER_PLAYER_10',context.Source) and TurnBased(context.Source)) or (context.HasContextFlag(StatsFunctorContext.OnStatusRemoved) and StatusId('INITIAL_ATTACK_TECHNICAL') and TurnBased()) or (context.HasContextFlag(StatsFunctorContext.OnStatusApplied) and StatusId('EXTRA_ATTACK_Q'))) and not IsModdedNonExtraAttack()"
+
+new entry "ExtraAttack_2"
+type "PassiveData"
+// using "ExtraAttack"
+using "ExtraAttack_2"
+// data "Conditions" "(context.HasContextFlag(StatsFunctorContext.OnCast) and ExtraAttackSpellCheck() and HasUseCosts('ActionPoint', true) and not Tagged('EXTRA_ATTACK_BLOCKED',context.Source) and not HasStatus('SLAYER_PLAYER',context.Source) and not HasStatus('SLAYER_PLAYER_10',context.Source) and TurnBased(context.Source)) or (context.HasContextFlag(StatsFunctorContext.OnStatusRemoved) and StatusId('INITIAL_ATTACK_TECHNICAL') and TurnBased()) or (context.HasContextFlag(StatsFunctorContext.OnStatusApplied) and StatusId('EXTRA_ATTACK_2_Q'))"
+data "Conditions" "((context.HasContextFlag(StatsFunctorContext.OnCast) and (ExtraAttackSpellCheck() or IsModdedExtraAttack()) and HasUseCosts('ActionPoint', true) and not Tagged('EXTRA_ATTACK_BLOCKED',context.Source) and not HasStatus('SLAYER_PLAYER',context.Source) and not HasStatus('SLAYER_PLAYER_10',context.Source) and TurnBased(context.Source)) or (context.HasContextFlag(StatsFunctorContext.OnStatusRemoved) and StatusId('INITIAL_ATTACK_TECHNICAL') and TurnBased()) or (context.HasContextFlag(StatsFunctorContext.OnStatusApplied) and StatusId('EXTRA_ATTACK_2_Q'))) and not IsModdedNonExtraAttack()"
+
+new entry "ThirstingBlade_Blade"
+type "PassiveData"
+// using "ExtraAttack"
+using "ThirstingBlade_Blade"
+// data "Conditions" "((context.HasContextFlag(StatsFunctorContext.OnCast) and ExtraAttackSpellCheck() and HasUseCosts('ActionPoint', true) and not Tagged('EXTRA_ATTACK_BLOCKED',context.Source) and not HasStatus('SLAYER_PLAYER',context.Source) and not HasStatus('SLAYER_PLAYER_10',context.Source) and TurnBased(context.Source) and (HasPactWeapon(context.Source) or HasHexbladeWeapon(context.Source))) or (context.HasContextFlag(StatsFunctorContext.OnStatusRemoved) and StatusId('INITIAL_ATTACK_TECHNICAL') and TurnBased() and (HasPactWeapon(context.Target) or  HasHexbladeWeapon(context.Target))) or (context.HasContextFlag(StatsFunctorContext.OnStatusApplied) and StatusId('EXTRA_ATTACK_THIRSTING_BLADE_Q'))) and (HasPassive('PactOfTheBlade',context.Source) or HasPassive('PactOfTheBlade_Hex',context.Source)) and not HasPassive('ExtraAttack',context.Source) and not HasPassive('ExtraAttack_2',context.Source);"
+data "Conditions" "((context.HasContextFlag(StatsFunctorContext.OnCast) and (ExtraAttackSpellCheck() or IsModdedExtraAttack()) and HasUseCosts('ActionPoint', true) and not Tagged('EXTRA_ATTACK_BLOCKED',context.Source) and not HasStatus('SLAYER_PLAYER',context.Source) and not HasStatus('SLAYER_PLAYER_10',context.Source) and TurnBased(context.Source) and (HasPactWeapon(context.Source) or HasHexbladeWeapon(context.Source))) or (context.HasContextFlag(StatsFunctorContext.OnStatusRemoved) and StatusId('INITIAL_ATTACK_TECHNICAL') and TurnBased() and (HasPactWeapon(context.Target) or  HasHexbladeWeapon(context.Target))) or (context.HasContextFlag(StatsFunctorContext.OnStatusApplied) and StatusId('EXTRA_ATTACK_THIRSTING_BLADE_Q'))) and (HasPassive('PactOfTheBlade',context.Source) or HasPassive('PactOfTheBlade_Hex',context.Source)) and not HasPassive('ExtraAttack',context.Source) and not HasPassive('ExtraAttack_2',context.Source) and not IsModdedNonExtraAttack()"
+
+// ==================================== Statuses ====================================
+
+new entry "EXTRA_ATTACK"
+type "StatusData"
+data "StatusType" "BOOST"
+using "EXTRA_ATTACK"
+// data "Boosts" "UnlockSpellVariant(ExtraAttackCheck(),ModifyUseCosts(Replace,ActionPoint,0,0,ActionPoint),ModifyIconGlow(),ModifyTooltipDescription())"
+data "Boosts" "UnlockSpellVariant(ExtraAttackCheck() | IsModdedExtraAttack() & ~IsModdedNonExtraAttack(),ModifyUseCosts(Replace,ActionPoint,0,0,ActionPoint),ModifyIconGlow(),ModifyTooltipDescription())"
+// data "RemoveConditions" "ExtraAttackSpellCheck() and HasUseCosts('ActionPoint',false,context.Target) and not IsOffHandAttack()"
+data "RemoveConditions" "(ExtraAttackSpellCheck() or IsModdedExtraAttack()) and HasUseCosts('ActionPoint',false,context.Target) and not IsOffHandAttack() and not IsModdedNonExtraAttack()"
+
+new entry "EXTRA_ATTACK_2"
+type "StatusData"
+data "StatusType" "BOOST"
+// using "EXTRA_ATTACK"
+using "EXTRA_ATTACK_2"
+// data "Boosts" "UnlockSpellVariant(ExtraAttackCheck(),ModifyUseCosts(Replace,ActionPoint,0,0,ActionPoint),ModifyIconGlow(),ModifyTooltipDescription())"
+data "Boosts" "UnlockSpellVariant(ExtraAttackCheck() | IsModdedExtraAttack() & ~IsModdedNonExtraAttack(),ModifyUseCosts(Replace,ActionPoint,0,0,ActionPoint),ModifyIconGlow(),ModifyTooltipDescription())"
+
+new entry "EXTRA_ATTACK_THIRSTING_BLADE"
+type "StatusData"
+data "StatusType" "BOOST"
+using "EXTRA_ATTACK_THIRSTING_BLADE"
+// data "Boosts" "UnlockSpellVariant(ExtraAttackCheck(),ModifyUseCosts(Replace,ActionPoint,0,0,ActionPoint),ModifyIconGlow(),ModifyTooltipDescription())"
+data "Boosts" "UnlockSpellVariant(ExtraAttackCheck() | IsModdedExtraAttack() & ~IsModdedNonExtraAttack(),ModifyUseCosts(Replace,ActionPoint,0,0,ActionPoint),ModifyIconGlow(),ModifyTooltipDescription())"
+// data "RemoveConditions" "not HasHigherPriorityExtraAttackQueued('EXTRA_ATTACK_THIRSTING_BLADE_Q') and not HasAnyExtraAttack()"
+data "RemoveConditions" "not HasHigherPriorityExtraAttackQueued('EXTRA_ATTACK_THIRSTING_BLADE_Q') and not HasAnyExtraAttack() and not IsModdedExtraAttack() or IsModdedNonExtraAttack()"

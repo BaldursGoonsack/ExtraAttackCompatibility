@@ -1,0 +1,26 @@
+// ==================================== Passives ====================================
+
+new entry "ExtraAttack_3"
+type "PassiveData"
+// using "ExtraAttack_2"
+using "ExtraAttack_3"
+// data "DisplayName" "he63a2c1ag91c1g43c8g9ed8gae8259444712;1"
+// data "Description" "h852450ffg190eg44c5g8843g5fb33d09b238;1"
+// data "Conditions" "(context.HasContextFlag(StatsFunctorContext.OnCast) and ExtraAttackSpellCheck() and HasUseCosts('ActionPoint', true) and not Tagged('EXTRA_ATTACK_BLOCKED',context.Source) and not HasStatus('SLAYER_PLAYER',context.Source) and not HasStatus('SLAYER_PLAYER_10',context.Source) and TurnBased(context.Source)) or (context.HasContextFlag(StatsFunctorContext.OnStatusRemoved) and StatusId('INITIAL_ATTACK_TECHNICAL') and TurnBased()) or (context.HasContextFlag(StatsFunctorContext.OnStatusApplied) and StatusId('EXTRA_ATTACK_3_Q'))"
+data "Conditions" "(context.HasContextFlag(StatsFunctorContext.OnCast) and (ExtraAttackSpellCheck() or IsModdedExtraAttack()) and HasUseCosts('ActionPoint', true) and not Tagged('EXTRA_ATTACK_BLOCKED',context.Source) and not HasStatus('SLAYER_PLAYER',context.Source) and not HasStatus('SLAYER_PLAYER_10',context.Source) and TurnBased(context.Source)) or (context.HasContextFlag(StatsFunctorContext.OnStatusRemoved) and StatusId('INITIAL_ATTACK_TECHNICAL') and TurnBased()) or (context.HasContextFlag(StatsFunctorContext.OnStatusApplied) and StatusId('EXTRA_ATTACK_3_Q'))"
+// data "StatsFunctors" "IF(((HasAnyHaste(context.Source) and not HasStatus('EXTRA_ATTACK_TRACKER', context.Source)) or (not HasAnyHaste(context.Source))) and context.HasContextFlag(StatsFunctorContext.OnCast)):ApplyStatus(SELF,EXTRA_ATTACK_3_Q,100,1);IF(((HasAnyHaste(context.Target) and not HasStatus('EXTRA_ATTACK_TRACKER')) or (not HasAnyHaste(context.Target))) and context.HasContextFlag(StatsFunctorContext.OnStatusRemoved)):ApplyStatus(EXTRA_ATTACK_3_Q,100,1);IF(context.HasContextFlag(StatsFunctorContext.OnStatusApplied) and not EXP_HasHigherPriorityExtraAttackQueued('EXTRA_ATTACK_3_Q') and not EXP_HasAnyExtraAttack()):ApplyStatus(EXTRA_ATTACK_3, 100, 1)"
+data "StatsFunctors" "IF(((HasAnyHaste(context.Source) and not HasStatus('EXTRA_ATTACK_TRACKER', context.Source)) or (not HasAnyHaste(context.Source))) and context.HasContextFlag(StatsFunctorContext.OnCast)):ApplyStatus(SELF,EXTRA_ATTACK_3_Q,100,1);IF(((HasAnyHaste(context.Target) and not HasStatus('EXTRA_ATTACK_TRACKER')) or (not HasAnyHaste(context.Target))) and context.HasContextFlag(StatsFunctorContext.OnStatusRemoved)):ApplyStatus(EXTRA_ATTACK_3_Q,100,1);IF(context.HasContextFlag(StatsFunctorContext.OnStatusApplied) and not EXP_HasHigherPriorityExtraAttackQueued('EXTRA_ATTACK_3_Q') and not EXP_HasAnyExtraAttack()):ApplyStatus(EXTRA_ATTACK_3, 100, 1)"
+
+// ==================================== Statuses ====================================
+
+new entry "EXTRA_ATTACK_3"
+type "StatusData"
+data "StatusType" "BOOST"
+// using "EXTRA_ATTACK_2"
+using "EXTRA_ATTACK_3"
+// data "DisplayName" "he63a2c1ag91c1g43c8g9ed8gae8259444712;1"
+// data "Description" "hf62756fag5dceg4890g9011g61f535a64c42;1"
+// data "StackPriority" "60"
+// data "Boosts" "UnlockSpellVariant(ExtraAttackCheck(),ModifyUseCosts(Replace,ActionPoint,0,0,ActionPoint),ModifyIconGlow(),ModifyTooltipDescription())"
+data "Boosts" "UnlockSpellVariant(ExtraAttackCheck() | IsModdedExtraAttack() & ~IsModdedNonExtraAttack(),ModifyUseCosts(Replace,ActionPoint,0,0,ActionPoint),ModifyIconGlow(),ModifyTooltipDescription())"
+// data "OnRemoveFunctors" "IF(RemoveCause(StatusRemoveCause.Condition)):ApplyStatus(EXTRA_ATTACK_2_Q, 100, 1);IF(not RemoveCause(StatusRemoveCause.TimeOut) and not HasStatus('ACTION_SURGE_ATTACK')):ApplyStatus(EXTRA_ATTACK_3_TRACKER, 100, 1)"
